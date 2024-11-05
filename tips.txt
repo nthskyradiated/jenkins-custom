@@ -1,0 +1,13 @@
+for building and pushing to a docker hub registry on freestyle job:
+ - generate a personal access token in dockerhub
+ - add your docker credentials to Jenkins' system config
+ - add credentials to the job
+ - Check “Use secret text(s) or file(s)”
+ - set env
+
+  - add shell script like so: 
+
+docker login -u "${USERNAME}" -p "${PASSWORD}" https://index.docker.io/v1/
+
+docker build -t your-registry/jenkins-express:v${BUILD_NUMBER} .
+docker push your-registry/jenkins-express:${BUILD_NUMBER}
