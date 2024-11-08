@@ -38,3 +38,18 @@ docker run --name jenkins-custom --rm --detach `
 
 ```
 
+### or in git bash for windows:
+```bash
+#make sure the source mount exists (the bind mount looks funny since I'm using git bash)
+docker run --name jenkins-custom --rm --detach \
+    --network jenkins \
+    --mount type=bind,source=//c/dockermounts/jenkinsmount,target=/var/jenkins_home \
+    --mount type=bind,source=//var/run/docker.sock,target=/var/run/docker.sock \
+    --publish 8080:8080 --publish 50000:50000 \
+    your-registry/jenkins-custom
+
+## Add this flag if you want to expose the docker daemon to the Jenkins container:
+## Make sure it is enabled in Docker desktop
+    -e DOCKER_HOST=tcp://host.docker.internal:2375
+
+```

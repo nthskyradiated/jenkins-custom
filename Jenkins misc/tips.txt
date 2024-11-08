@@ -1,0 +1,25 @@
+
+Setting up Jenkins to run as a container is a nightmare. 
+
+Here are a couple of tips I find useful:
+ - make sure you run the container properly based on your environment. In my case, I run docker with git bash on a windows machine so all my volume mounts look weird with all those extra slashes.
+ - double check all your needed credentials are configured properly (i.e. dockerhub, github, npm, etc.) and how they are referenced in your projects.
+ 
+    for example: for building and pushing to a docker hub registry on freestyle job:
+    - generate a personal access token in dockerhub
+    - add your docker credentials to Jenkins' system config
+    - add credentials to the job
+    - Check “Use secret text(s) or file(s)”
+    - set env
+    - add shell script like so: 
+
+    docker login -u "${USERNAME}" -p "${PASSWORD}" https://index.docker.io/v1/
+    docker build -t your-registry/jenkins-express:v${BUILD_NUMBER} .
+
+    This is set up differently when using it in a pipeline project.
+
+- you could pretty much install what you need by remoting directly to the Jenkins shell and doing the installation from there: "docker exec -it your-jenkins-container bash". Or maybe build your own image.
+
+- Setting up a Jenkins agent is a bit cryptic especially when connecting with SSH as it uses an older key format.
+  Generate your own key with: ssh-keygen -m PEM -t rsa -P "" -f afile
+  
